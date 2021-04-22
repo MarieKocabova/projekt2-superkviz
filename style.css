@@ -73,7 +73,7 @@ h1 {
 
 #obrazek {
 	padding: 5px;
-	width: 100%;
+	width: 33%;
 	height: auto;
 	border-radius: 50%;
 	border: 3px dotted var(--cervena);
