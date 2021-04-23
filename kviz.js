@@ -28,13 +28,8 @@ let poleOtazek = [
     }
 ]
 
-//let kviz = document.querySelector('.kviz');
-//let obsah = document.querySelector('.obsah');
-//let mozneOdpovedi = document.querySelector('#odpovedi');
 let indexAktualniOtazky = 0;  //tady udržuju index aktuální otázky
-
-console.log(poleOtazek[0].zvolenaOdpoved)
-
+let pocetSpravnych = 0; //tady počet správných odpovědí
 
 
 //fce vygeneruj otázku
@@ -70,29 +65,73 @@ getQuestion(indexAktualniOtazky);
 function choice(answer) {
     let indexOdpovedi = answer.getAttribute("data-odpoved");
     let textOdpovedi = answer.innerHTML
-    alert ('zkouska - '+ answer.innerHTML + ' , index odpovedi: '+ indexOdpovedi);
+    
     // ulož do proměnné zvolenou odpověď
     poleOtazek[indexAktualniOtazky].zvolenaOdpoved = indexOdpovedi;
     poleOtazek[indexAktualniOtazky].zvolenaOdpovedText = textOdpovedi;
-    
-    console.log(poleOtazek[indexAktualniOtazky].zvolenaOdpoved); 
-    console.log(poleOtazek[indexAktualniOtazky].zvolenaOdpovedText);
 
+    // smaž možnosti předchozí otázky???
+    
+
+    // posuň se na další otázku nebo vyhodnocení
     indexAktualniOtazky = indexAktualniOtazky + 1;
-    getQuestion(indexAktualniOtazky);
+    if (indexAktualniOtazky < poleOtazek.length) {
+        getQuestion(indexAktualniOtazky);
+    } else {
+        result();
+    } 
+    
 }
 
-//3. smaž možnosti
-
-//4. if je nějaká další otázka (tj. aktuální index otázky + 1 !=null nebo undefined) -> vygeneruj otázku [aktuální+1], else -> nastav kviz: display none a vysledek: display "" ->  vygeneruj vyhodnocení
 
 //vyhodnocení
-function vyhodnoceni() {
+function result() {
     //schovej kviz
+    document.querySelector('.kviz').style.display = 'none';
+
     //ukaž výsledek
+    document.querySelector('.vysledek').style.display = 'block';
+
+    // cyklus pro každou otázku - vygeneruj samostatný div
+    for (let i = 0; i < poleOtazek.length; i++) {
+        let vypisVysledky = document.createElement('div');
+        vypisVysledky.setAttribute("id", "vypisVysledky");
+
+        // pořadí + text otázky do h3
+        let vypisOtazky = document.createElement('h3');
+        vypisOtazky.innerHTML = poleOtazek[i].cisloOtazky + '. ' + poleOtazek[i].otazkaText;
+        
+        //tvoje odpověď: zvolená odpověď
+        let volba = document.createElement('p');
+        volba.setAttribute("id", "volba1")
+        volba.innerHTML = "Tvoje odpověď: " + poleOtazek[i].zvolenaOdpovedText;  
+
+        //zkontroluj správnost
+        let vyhodnoceni = document.createElement('p');
+        if (poleOtazek[i].zvolenaOdpoved == poleOtazek[i].spravnaOdpoved) {
+            vyhodnoceni.innerHTML = "To je SPRÁVNĚ.";
+            pocetSpravnych = pocetSpravnych + 1;
+        } else {
+            vyhodnoceni.innerHTML = "Správná odpověď: " + poleOtazek[i].moznosti[poleOtazek[i].spravnaOdpoved];        
+        }
+
+        vypisVysledky.appendChild(vypisOtazky);
+        vypisVysledky.appendChild(volba);
+        vypisVysledky.appendChild(vyhodnoceni);
+        document.querySelector('.vysledek').appendChild(vypisVysledky);
+    }
+    
+    //text 'Správně je.... Úspěšnost....%.'
+    let uspesnost = document.createElement('h2');
+    let procentSpravnych = Math.floor((pocetSpravnych/poleOtazek.length) * 100);
+    uspesnost.innerHTML = "Správně " + pocetSpravnych + " ze " + poleOtazek.length + " otázek. Úspěšnost " + procentSpravnych + " %.";
+    document.querySelector('.vysledek').appendChild(uspesnost);
+
 } 
-//2. cyklus foreach otázku - asi vygeneruj samostatný div, kde bude:
-    //2.1. pořadí + text otázky
-    //2.2. tvoje odpověď: zvolená odpověď (poleOtazek[].moznosti[zvolená])
-    //2.3. zkontroluj správnost: if zvolená==správná -> vypiš "To je Správně", else -> Správná odpověď: poleOtazek[].spravnaOdpoved
-//3. text 'Správně je spravneOdpovedi.length z poleOtazek.lenght.... Úspěšnost....%.'
+
+
+
+
+    
+    
+    
