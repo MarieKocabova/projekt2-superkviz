@@ -25,6 +25,15 @@ let poleOtazek = [
         spravnaOdpoved: 0,
         zvolenaOdpoved:"",
         zvolenaOdpovedText:""
+    },
+    {
+        cisloOtazky: 4,
+        foto: 'snehurka.jpg',
+        otazkaText: 'Kdo je na obrázku?',
+        moznosti: ['Matěj', 'Filip', 'Sněhurka'],
+        spravnaOdpoved: 0,
+        zvolenaOdpoved:"",
+        zvolenaOdpovedText:""
     }
 ]
 
@@ -32,16 +41,18 @@ let indexAktualniOtazky = 0;  //tady udržuju index aktuální otázky
 let pocetSpravnych = 0; //tady počet správných odpovědí
 
 
-//fce vygeneruj otázku
-
+//vygeneruj otázku
 function getQuestion(indexAktualniOtazky) {
-    //1. červený text - na které otázce z kolika jsem
+    //červený text - na které otázce z kolika jsem
     document.querySelector('#poradi').innerHTML = 'Otázka ' + poleOtazek[indexAktualniOtazky].cisloOtazky + '/' + poleOtazek.length;
-    //2. text otázky
+
+    //text otázky
     document.querySelector('#otazka').innerHTML = poleOtazek[indexAktualniOtazky].otazkaText;
-    //3. obrázek
+
+    //obrázek
     document.querySelector('.foto').src = 'obrazky/' + poleOtazek[indexAktualniOtazky].foto;
-    //4. div s možnostmi viz readme foreach moznosti, pomůže asi tohle: https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_global_data 
+
+    //div s možnostmi viz readme, pomůže asi tohle: https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_global_data 
     for (let i = 0; i < poleOtazek[indexAktualniOtazky].moznosti.length; i++) {
         const odpovedi = document.createElement('ul');
         odpovedi.setAttribute("id", "odpovedi");
@@ -49,6 +60,7 @@ function getQuestion(indexAktualniOtazky) {
         const moznost = document.createElement('li');
         moznost.setAttribute("data-odpoved", i);
         moznost.setAttribute("onclick", "choice(this)");
+        moznost.setAttribute("id", "moznost")
         moznost.innerHTML = poleOtazek[indexAktualniOtazky].moznosti[i];
 
         odpovedi.appendChild(moznost);
@@ -61,7 +73,6 @@ getQuestion(indexAktualniOtazky);
 
 
 //onclick na odpověď
-
 function choice(answer) {
     let indexOdpovedi = answer.getAttribute("data-odpoved");
     let textOdpovedi = answer.innerHTML
@@ -70,8 +81,8 @@ function choice(answer) {
     poleOtazek[indexAktualniOtazky].zvolenaOdpoved = indexOdpovedi;
     poleOtazek[indexAktualniOtazky].zvolenaOdpovedText = textOdpovedi;
 
-    // smaž možnosti předchozí otázky???
-    
+    // smaž možnosti předchozí otázky 
+    document.querySelector('#moznosti').innerHTML = "";
 
     // posuň se na další otázku nebo vyhodnocení
     indexAktualniOtazky = indexAktualniOtazky + 1;

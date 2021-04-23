@@ -106,9 +106,8 @@ h1 {
 	transform: translateX(-10px);
 }
 
-
 .vysledek {
-	display: none
+	display: none;
 }
 
 .vysledek h2 {
