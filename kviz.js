@@ -31,7 +31,7 @@ let poleOtazek = [
         foto: 'snehurka.jpg',
         otazkaText: 'Kdo je na obrázku?',
         moznosti: ['Matěj', 'Filip', 'Sněhurka'],
-        spravnaOdpoved: 0,
+        spravnaOdpoved: 1,
         zvolenaOdpoved:"",
         zvolenaOdpovedText:""
     }
